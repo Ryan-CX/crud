@@ -1,5 +1,8 @@
 import './App.css';
 import { useState } from 'react';
+//import axios
+import axios from 'axios';
+
 function App() {
 	const [name, setName] = useState('');
 	const [price, setPrice] = useState(0);
@@ -7,10 +10,22 @@ function App() {
 	const [category, setCategory] = useState('');
 	const [origin, setOrigin] = useState('');
 
-	const displayInfo = () => {
-		console.log(
-			`Name: ${name}  Price: ${price}  Quantity: ${quantity}  Category: ${category}  Origin: ${origin}`
-		);
+	//click button to add item
+	const addItem = () => {
+		axios
+			.post('http://localhost:3001/create', {
+				itemName: name,
+				itemPrice: price,
+				itemQuantity: quantity,
+				itemCategory: category,
+				itemOrigin: origin,
+			})
+			.then(() => {
+				console.log('success');
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	};
 
 	return (
@@ -51,7 +66,7 @@ function App() {
 						setOrigin(e.target.value);
 					}}
 				/>
-				<button onClick={displayInfo}>Add Item</button>
+				<button onClick={addItem}>Add Item</button>
 			</div>
 		</div>
 	);
