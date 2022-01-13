@@ -11,7 +11,7 @@ function App() {
 	const [origin, setOrigin] = useState('');
 	const [itemList, setItemList] = useState([]);
 	//set up the filter
-	const [search, setSearch] = useState();
+	const [search, setSearch] = useState('');
 
 	//get all items as page loads
 	useEffect(() => {
@@ -128,7 +128,7 @@ function App() {
 			<div className='search'>
 				<input
 					type='text'
-					placeholder='Search'
+					placeholder='Type Keyword to filter'
 					onChange={(e) => setSearch(e.target.value)}
 				/>
 			</div>
@@ -137,64 +137,77 @@ function App() {
 
 			<div className='list'>
 				<h1>Item List</h1>
-				{itemList.map((item, key) => {
-					return (
-						<div className='item' key={key}>
-							<div>
-								<h3>{item.name}</h3>
-								<input
-									type='text'
-									onChange={(e) => {
-										setName(e.target.value);
-									}}
-								/>
-								<button onClick={() => updateName(item._id)}>Edit</button>
-							</div>
-							<div>
-								<p>{item.price}</p>
-								<input
-									type='text'
-									onChange={(e) => {
-										setPrice(e.target.value);
-									}}
-								/>
-								<button onClick={() => updatePrice(item._id)}>Edit</button>
-							</div>
-							<div>
-								<p>{item.quantity}</p>
-								<input
-									type='text'
-									onChange={(e) => {
-										setQuantity(e.target.value);
-									}}
-								/>
-								<button onClick={() => updateQuantity(item._id)}>Edit</button>
-							</div>
-							<div>
-								<p>{item.category}</p>
-								<input
-									type='text'
-									onChange={(e) => {
-										setCategory(e.target.value);
-									}}
-								/>
-								<button onClick={() => updateCategory(item._id)}>Edit</button>
-							</div>
-							<div>
-								<p>{item.origin}</p>
-								<input
-									type='text'
-									onChange={(e) => {
-										setOrigin(e.target.value);
-									}}
-								/>
-								<button onClick={() => updateOrigin(item._id)}>Edit</button>
-							</div>
+				{itemList
+					.filter((item) => {
+						if (search == '') {
+							return item;
+						} else if (
+							item.name.toLowerCase().includes(search.toLowerCase()) ||
+							item.category.toLowerCase().includes(search.toLowerCase()) ||
+							item.origin.toLowerCase().includes(search.toLowerCase())
+						) {
+							return item;
+						}
+					})
 
-							<button onClick={() => deleteItem(item._id)}>Delete</button>
-						</div>
-					);
-				})}
+					.map((item, key) => {
+						return (
+							<div className='item' key={key}>
+								<div>
+									<h3>{item.name}</h3>
+									<input
+										type='text'
+										onChange={(e) => {
+											setName(e.target.value);
+										}}
+									/>
+									<button onClick={() => updateName(item._id)}>Edit</button>
+								</div>
+								<div>
+									<p>{item.price}</p>
+									<input
+										type='text'
+										onChange={(e) => {
+											setPrice(e.target.value);
+										}}
+									/>
+									<button onClick={() => updatePrice(item._id)}>Edit</button>
+								</div>
+								<div>
+									<p>{item.quantity}</p>
+									<input
+										type='text'
+										onChange={(e) => {
+											setQuantity(e.target.value);
+										}}
+									/>
+									<button onClick={() => updateQuantity(item._id)}>Edit</button>
+								</div>
+								<div>
+									<p>{item.category}</p>
+									<input
+										type='text'
+										onChange={(e) => {
+											setCategory(e.target.value);
+										}}
+									/>
+									<button onClick={() => updateCategory(item._id)}>Edit</button>
+								</div>
+								<div>
+									<p>{item.origin}</p>
+									<input
+										type='text'
+										onChange={(e) => {
+											setOrigin(e.target.value);
+										}}
+									/>
+									<button onClick={() => updateOrigin(item._id)}>Edit</button>
+								</div>
+
+								<button onClick={() => deleteItem(item._id)}>Delete</button>
+							</div>
+						);
+					})}
 			</div>
 		</div>
 	);
