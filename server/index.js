@@ -3,40 +3,85 @@
 const express = require('express');
 const app = express();
 require('dotenv').config();
-const port = 3001;
+const mongoose = require('mongoose');
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
+const ItemModel = require('./models/items');
 
-//setup mysql connection
-const mysql = require('mysql');
-const db = mysql.createConnection({
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_DATABASE,
+//connect to mongoose
+mongoose.connect(
+	process.env.DB_CONNECTION,
+	{ useNewUrlParser: true, useUnifiedTopology: true },
+	() => {
+		console.log('connected to mongoose');
+	}
+);
+
+//create a new item
+app.post('/insert', async (req, res) => {
+	const name = req.body.name;
+	const price = req.body.price;
+	const quantity = req.body.quantity;
+	const category = req.body.category;
+	const origin = req.body.origin;
+
+	const itemInfo = new ItemModel({
+		name: name,
+		price: price,
+		quantity: quantity,
+		category: category,
+		origin: origin,
+	});
+	try {
+		await itemInfo.save();
+	} catch (error) {
+		console.log(error);
+	}
 });
-//connect to database
 
-//post request
-app.post('/create', (req, res) => {
-	const name = req.body.itemName;
-	const price = req.body.itemPrice;
-	const quantity = req.body.itemQuantity;
-	const category = req.body.itemCategory;
-	const origin = req.body.itemOrigin;
-
-	db.query(
-		'INSERT INTO item (name, price, quantity, category, origin) VALUES (?,?,?,?,?)',
-		[name, price, quantity, category, origin],
-		(err, result) => {
-			if (err) {
-				console.log(err);
-			} else {
-				res.send('value added: ' + result);
-			}
+//get all items
+app.get('/read', async (req, res) => {
+	ItemModel.find({}, (err, items) => {
+		if (err) {
+			console.log(err);
+		} else {
+			res.send(items);
 		}
-	);
+	});
 });
 
+//update item
+app.put('/update/:id', async (req, res) => {
+	const id = req.params.id;
+	const name = req.body.name;
+	const price = req.body.price;
+	const quantity = req.body.quantity;
+	const category = req.body.category;
+	const origin = req.body.origin;
+
+	try {
+		await ItemModel.findByIdAndUpdate(id, {
+			name: name,
+			price: price,
+			quantity: quantity,
+			category: category,
+			origin: origin,
+		});
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+//delete item
+app.delete('/delete/:id', async (req, res) => {
+	const id = req.params.id;
+	try {
+		await ItemModel.findByIdAndDelete(id);
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+const port = 3001;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
