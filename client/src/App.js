@@ -15,7 +15,7 @@ function App() {
 
 	//get all items as page loads
 	useEffect(() => {
-		axios.get('http://localhost:3001/read').then((response) => {
+		axios.get('https://crudappbackend1.herokuapp.com/read').then((response) => {
 			setItemList(response.data);
 		});
 	}, []);
@@ -23,7 +23,7 @@ function App() {
 	//click button to add item, after added, refresh page
 	const addItem = () => {
 		axios
-			.post('http://localhost:3001/insert', {
+			.post('https://crudappbackend1.herokuapp.com/insert', {
 				name: name,
 				price: price,
 				quantity: quantity,
@@ -42,7 +42,7 @@ function App() {
 
 	//update item
 	const updateName = (id) => {
-		axios.put(`http://localhost:3001/update/${id}`, {
+		axios.put(`https://crudappbackend1.herokuapp.com/update/${id}`, {
 			name: name,
 		});
 		window.location.reload();
@@ -50,33 +50,35 @@ function App() {
 
 	//delete item
 	const deleteItem = (id) => {
-		axios.delete(`http://localhost:3001/delete/${id}`).then(() => {
-			console.log('success');
-		});
+		axios
+			.delete(`https://crudappbackend1.herokuapp.com/delete/${id}`)
+			.then(() => {
+				console.log('success');
+			});
 		window.location.reload();
 	};
 
 	const updatePrice = (id) => {
-		axios.put(`http://localhost:3001/update/${id}`, {
+		axios.put(`https://crudappbackend1.herokuapp.com/update/${id}`, {
 			price: price,
 		});
 		window.location.reload();
 	};
 
 	const updateQuantity = (id) => {
-		axios.put(`http://localhost:3001/update/${id}`, {
+		axios.put(`https://crudappbackend1.herokuapp.com/update/${id}`, {
 			quantity: quantity,
 		});
 		window.location.reload();
 	};
 	const updateCategory = (id) => {
-		axios.put(`http://localhost:3001/update/${id}`, {
+		axios.put(`https://crudappbackend1.herokuapp.com/update/${id}`, {
 			category: category,
 		});
 		window.location.reload();
 	};
 	const updateOrigin = (id) => {
-		axios.put(`http://localhost:3001/update/${id}`, {
+		axios.put(`https://crudappbackend1.herokuapp.com/update/${id}`, {
 			origin: origin,
 		});
 		window.location.reload();
@@ -139,7 +141,7 @@ function App() {
 				<h1>Item List</h1>
 				{itemList
 					.filter((item) => {
-						if (search == '') {
+						if (search === '') {
 							return item;
 						} else if (
 							item.name.toLowerCase().includes(search.toLowerCase()) ||

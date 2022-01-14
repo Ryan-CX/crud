@@ -8,6 +8,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 const ItemModel = require('./models/items');
+const PORT = process.env.PORT;
 
 //connect to mongoose
 mongoose.connect(
@@ -84,5 +85,5 @@ app.delete('/delete/:id', async (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () =>
-	console.log(`Example app listening on port ${port}!`)
+	console.log(`Example app listening on port ${PORT}!`)
 );
