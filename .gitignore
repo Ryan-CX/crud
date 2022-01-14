@@ -1,0 +1,2 @@
+# ignore the node modules in the server folder
+server/node_modules/
