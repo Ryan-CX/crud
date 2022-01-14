@@ -128,6 +128,7 @@ function App() {
 
 			{/* add a search bar */}
 			<div className='search'>
+				<label>Search based on any data of the item</label>
 				<input
 					type='text'
 					placeholder='Type Keyword to filter'
@@ -139,77 +140,81 @@ function App() {
 
 			<div className='list'>
 				<h1>Item List</h1>
-				{itemList
-					.filter((item) => {
-						if (search === '') {
-							return item;
-						} else if (
-							item.name.toLowerCase().includes(search.toLowerCase()) ||
-							item.category.toLowerCase().includes(search.toLowerCase()) ||
-							item.origin.toLowerCase().includes(search.toLowerCase())
-						) {
-							return item;
-						}
-					})
+				{
+					//filter the item based on name, price, origin, category in the search bar
+					itemList
+						.filter((item) => {
+							return (
+								item.name.toLowerCase().includes(search.toLowerCase()) ||
+								item.origin.toLowerCase().includes(search.toLowerCase()) ||
+								item.category.toLowerCase().includes(search.toLowerCase()) ||
+								item.price.toString().includes(search.toLowerCase()) ||
+								item.quantity.toString().includes(search.toLowerCase())
+							);
+						})
+						.map((item, key) => {
+							return (
+								<div className='item' key={key}>
+									<div>
+										<h3>Name: {item.name}</h3>
+										<input
+											type='text'
+											onChange={(e) => {
+												setName(e.target.value);
+											}}
+										/>
+										<button onClick={() => updateName(item._id)}>Edit</button>
+									</div>
+									<div>
+										<p>Price: {item.price}</p>
+										<input
+											type='text'
+											onChange={(e) => {
+												setPrice(e.target.value);
+											}}
+										/>
+										<button onClick={() => updatePrice(item._id)}>Edit</button>
+									</div>
+									<div>
+										<p>Quantity: {item.quantity}</p>
+										<input
+											type='text'
+											onChange={(e) => {
+												setQuantity(e.target.value);
+											}}
+										/>
+										<button onClick={() => updateQuantity(item._id)}>
+											Edit
+										</button>
+									</div>
+									<div>
+										<p>Category: {item.category}</p>
+										<input
+											type='text'
+											onChange={(e) => {
+												setCategory(e.target.value);
+											}}
+										/>
+										<button onClick={() => updateCategory(item._id)}>
+											Edit
+										</button>
+									</div>
+									<div>
+										<p>Origin: {item.origin}</p>
+										<input
+											type='text'
+											onChange={(e) => {
+												setOrigin(e.target.value);
+											}}
+										/>
+										<button onClick={() => updateOrigin(item._id)}>Edit</button>
+									</div>
 
-					.map((item, key) => {
-						return (
-							<div className='item' key={key}>
-								<div>
-									<h3>{item.name}</h3>
-									<input
-										type='text'
-										onChange={(e) => {
-											setName(e.target.value);
-										}}
-									/>
-									<button onClick={() => updateName(item._id)}>Edit</button>
+									<button onClick={() => deleteItem(item._id)}>Delete</button>
 								</div>
-								<div>
-									<p>{item.price}</p>
-									<input
-										type='text'
-										onChange={(e) => {
-											setPrice(e.target.value);
-										}}
-									/>
-									<button onClick={() => updatePrice(item._id)}>Edit</button>
-								</div>
-								<div>
-									<p>{item.quantity}</p>
-									<input
-										type='text'
-										onChange={(e) => {
-											setQuantity(e.target.value);
-										}}
-									/>
-									<button onClick={() => updateQuantity(item._id)}>Edit</button>
-								</div>
-								<div>
-									<p>{item.category}</p>
-									<input
-										type='text'
-										onChange={(e) => {
-											setCategory(e.target.value);
-										}}
-									/>
-									<button onClick={() => updateCategory(item._id)}>Edit</button>
-								</div>
-								<div>
-									<p>{item.origin}</p>
-									<input
-										type='text'
-										onChange={(e) => {
-											setOrigin(e.target.value);
-										}}
-									/>
-									<button onClick={() => updateOrigin(item._id)}>Edit</button>
-								</div>
-
-								<button onClick={() => deleteItem(item._id)}>Delete</button>
-							</div>
-						);
-					})}
+							);
+						})
+				}
 			</div>
 		</div>
 	);
